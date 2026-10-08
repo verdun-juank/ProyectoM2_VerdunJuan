@@ -14,7 +14,7 @@ API REST desarrollada con Node.js, Express y PostgreSQL.
 ## Instalación
 
 Clonar el proyecto:
-git clone URL_DEL_REPOSITORIO
+git clone [URL_DEL_REPOSITORIO](https://github.com/verdun-juank/ProyectoM2_VerdunJuan.git)
 
 una vez clonado el repositorio o descargado
 todos los comandos usados estan en scripts.sql
