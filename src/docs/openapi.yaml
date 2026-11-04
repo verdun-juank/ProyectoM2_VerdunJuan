@@ -1,0 +1,323 @@
+
+openapi: 3.0.3
+
+info:
+  title: Blog API
+  description: API REST para gestionar autores y publicaciones con Node.js, Express y PostgreSQL.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+
+tags:
+  - name: Authors
+    description: Gestión de autores
+  - name: Posts
+    description: Gestión de publicaciones
+
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Gabriel García Márquez
+        email:
+          type: string
+          format: email
+          example: gabriel@example.com
+        bio:
+          type: string
+          nullable: true
+          example: Escritor colombiano
+        created_at:
+          type: string
+          format: date-time
+
+    AuthorInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: Gabriel García Márquez
+        email:
+          type: string
+          format: email
+          example: gabriel@example.com
+        bio:
+          type: string
+          nullable: true
+          example: Escritor colombiano
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Cien años de soledad
+        content:
+          type: string
+          example: Una novela publicada en 1967.
+        author_id:
+          type: integer
+          example: 1
+        published:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+
+    PostInput:
+      type: object
+      required:
+        - title
+        - content
+        - author_id
+      properties:
+        title:
+          type: string
+          example: Cien años de soledad
+        content:
+          type: string
+          example: Una novela publicada en 1967.
+        author_id:
+          type: integer
+          example: 1
+        published:
+          type: boolean
+          default: false
+          example: true
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Recurso no encontrado
+
+paths:
+  /authors:
+    get:
+      tags:
+        - Authors
+      summary: Listar todos los autores
+      responses:
+        "200":
+          description: Lista de autores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Author"
+        "500":
+          description: Error interno
+
+    post:
+      tags:
+        - Authors
+      summary: Crear un autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "201":
+          description: Autor creado correctamente
+        "400":
+          description: Datos inválidos
+        "409":
+          description: Email duplicado
+
+  /authors/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID del autor
+        schema:
+          type: integer
+          minimum: 1
+
+    get:
+      tags:
+        - Authors
+      summary: Obtener un autor por ID
+      responses:
+        "200":
+          description: Autor encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado
+
+    put:
+      tags:
+        - Authors
+      summary: Actualizar un autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "200":
+          description: Autor actualizado
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Autor no encontrado
+        "409":
+          description: Email duplicado
+
+    delete:
+      tags:
+        - Authors
+      summary: Eliminar un autor
+      responses:
+        "200":
+          description: Autor eliminado
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado
+
+  /posts:
+    get:
+      tags:
+        - Posts
+      summary: Listar todas las publicaciones
+      responses:
+        "200":
+          description: Lista de publicaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "500":
+          description: Error interno
+
+    post:
+      tags:
+        - Posts
+      summary: Crear una publicación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "201":
+          description: Publicación creada
+        "400":
+          description: Datos inválidos o autor inexistente
+
+  /posts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID de la publicación
+        schema:
+          type: integer
+          minimum: 1
+
+    get:
+      tags:
+        - Posts
+      summary: Obtener una publicación por ID
+      responses:
+        "200":
+          description: Publicación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: ID inválido
+        "404":
+          description: Publicación no encontrada
+
+    put:
+      tags:
+        - Posts
+      summary: Actualizar una publicación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "200":
+          description: Publicación actualizada
+        "400":
+          description: Datos inválidos o autor inexistente
+        "404":
+          description: Publicación no encontrada
+
+    delete:
+      tags:
+        - Posts
+      summary: Eliminar una publicación
+      responses:
+        "200":
+          description: Publicación eliminada
+        "400":
+          description: ID inválido
+        "404":
+          description: Publicación no encontrada
+
+  /posts/author/{authorId}:
+    get:
+      tags:
+        - Posts
+      summary: Obtener las publicaciones de un autor
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          description: ID del autor
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Autor y sus publicaciones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author:
+                    $ref: "#/components/schemas/Author"
+                  posts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Post"
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado

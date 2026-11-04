@@ -1,45 +1,42 @@
-require("dotenv").config();
-
 const express = require("express");
 const pool = require("./config/db");
+
 const authorsRoutes = require("./routes/authors.routes");
 const postsRoutes = require("./routes/posts.routes");
 
+const notFoundMiddleware = require("./middlewares/not-found.middleware");
+const errorMiddleware = require("./middlewares/error.middleware");
+
 const app = express();
 
-// Permite recibir y procesar JSON en las solicitudes.
+// Permite recibir JSON.
 app.use(express.json());
 
-app.use("/authors", authorsRoutes);
-app.use("/posts", postsRoutes);
-
-// Ruta inicial para comprobar que la API funciona.
+// Ruta inicial.
 app.get("/", (req, res) => {
-    res.json({
+    res.status(200).json({
         message: "API REST funcionando correctamente"
     });
 });
 
-// Comprobar la conexión con PostgreSQL.
+// Comprobar conexión con PostgreSQL.
 app.get("/db-test", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT NOW()");
+    const result = await pool.query("SELECT NOW()");
 
-        res.json({
-            message: "Conexión con PostgreSQL correcta",
-            time: result.rows[0].now
-        });
-    } catch (error) {
-        console.error("Error al conectar con PostgreSQL:", error.message);
-
-        res.status(500).json({
-            error: "No se pudo conectar con la base de datos"
-        });
-    }
+    res.status(200).json({
+        message: "Conexión con PostgreSQL correcta",
+        time: result.rows[0].now
+    });
 });
 
-const PORT = process.env.PORT || 3000;
+// Rutas principales.
+app.use("/authors", authorsRoutes);
+app.use("/posts", postsRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Servidor iniciado en http://localhost:${PORT}`);
-});
+// Gestionar rutas inexistentes.
+app.use(notFoundMiddleware);
+
+// Gestionar errores generales.
+app.use(errorMiddleware);
+
+module.exports = app;
