@@ -1,3 +1,15 @@
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yaml");
+const fs = require("fs");
+const path = require("path");
+
+const swaggerDocument = YAML.parse(
+    fs.readFileSync(
+        path.join(__dirname, "docs", "openapi.yaml"),
+        "utf8"
+    )
+);
+
 const express = require("express");
 const pool = require("./config/db");
 
@@ -32,6 +44,13 @@ app.get("/db-test", async (req, res) => {
 // Rutas principales.
 app.use("/authors", authorsRoutes);
 app.use("/posts", postsRoutes);
+
+// Documentación de la API con Swagger.
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+);
 
 // Gestionar rutas inexistentes.
 app.use(notFoundMiddleware);
