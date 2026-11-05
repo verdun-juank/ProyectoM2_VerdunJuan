@@ -103,11 +103,10 @@ Para ejecutar el proyecto localmente necesitas:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone URL_DEL_REPOSITORIO
+git clone [URL_DEL_REPOSITORIO](https://github.com/verdun-juank/ProyectoM2_VerdunJuan)
 cd blog-api/Desarrollo
 ```
 
-Reemplazar `URL_DEL_REPOSITORIO` por la dirección real del repositorio de GitHub.
 
 ### 2. Instalar dependencias
 
@@ -125,12 +124,7 @@ CREATE DATABASE blog_api;
 
 ### 4. Ejecutar los scripts SQL
 
-Dentro de la carpeta `sql` se encuentran los siguientes archivos:
-
-- `setup.sql`: crea las tablas `authors` y `posts`, incluyendo su relación.
-- `seed.sql`: inserta autores y publicaciones de ejemplo.
-
-Ejecutar primero `setup.sql` y después `seed.sql`, desde Query Tool de pgAdmin o mediante una herramienta compatible con PostgreSQL.
+Ejecutar `setup.sql` desde Query Tool de pgAdmin o mediante una herramienta compatible con PostgreSQL.
 
 **Importante:** ejecutar los scripts sobre una base de datos nueva o vacía. El seed de ejemplo utiliza los IDs iniciales 1, 2 y 3 para relacionar las publicaciones con sus autores.
 
@@ -316,7 +310,7 @@ Los nombres de las referencias deben coincidir con el nombre real del servicio P
 
 ### 4. Inicializar la base de datos
 
-Ejecutar los scripts `setup.sql` y `seed.sql` sobre la base de datos PostgreSQL de Railway, utilizando una conexión administrativa apropiada.
+Ejecutar `setup.sql` sobre la base de datos PostgreSQL de Railway, utilizando una conexión administrativa apropiada.
 
 Primero se crean las tablas y después se insertan los datos de ejemplo.
 
