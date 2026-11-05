@@ -47,10 +47,7 @@ ProyectoM2_VerdunJuan/
 │   ├── authors.test.js
 │   └── posts.test.js
 │
-├── sql/
-│   ├── setup.sql
-│   └── seed.sql
-│
+├── setup.sql
 ├── .env.example
 ├── .gitignore
 ├── package.json
