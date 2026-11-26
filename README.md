@@ -1,6 +1,6 @@
 # Blog API REST
 
-Proycto modulo 3 (https://github.com/verdun-juank/ProyectoM3_VerdunJuan)
+- Proycto modulo 3 (https://github.com/verdun-juank/ProyectoM3_VerdunJuan)
 API REST desarrollada con **Node.js, Express y PostgreSQL** para administrar autores y publicaciones. El proyecto permite realizar operaciones CRUD, validar datos, gestionar errores y consultar publicaciones asociadas a cada autor.
 
 La API cuenta con pruebas automatizadas mediante Jest y Supertest, y documentación interactiva mediante OpenAPI y Swagger UI.
